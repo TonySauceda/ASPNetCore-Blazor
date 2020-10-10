@@ -7,6 +7,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InventoryBlazorApp", "Inven
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entities", "Entities\Entities.csproj", "{04A9148B-1DF1-440A-B266-B4E4B875387D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "DataAccess\DataAccess.csproj", "{6A41FDE6-64B8-4089-B5A2-79ED1BBA64FC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Business", "Business\Business.csproj", "{62221DB6-25AA-44BD-AFF1-A6696955FB12}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{04A9148B-1DF1-440A-B266-B4E4B875387D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{04A9148B-1DF1-440A-B266-B4E4B875387D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{04A9148B-1DF1-440A-B266-B4E4B875387D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A41FDE6-64B8-4089-B5A2-79ED1BBA64FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A41FDE6-64B8-4089-B5A2-79ED1BBA64FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A41FDE6-64B8-4089-B5A2-79ED1BBA64FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A41FDE6-64B8-4089-B5A2-79ED1BBA64FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62221DB6-25AA-44BD-AFF1-A6696955FB12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62221DB6-25AA-44BD-AFF1-A6696955FB12}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62221DB6-25AA-44BD-AFF1-A6696955FB12}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62221DB6-25AA-44BD-AFF1-A6696955FB12}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
