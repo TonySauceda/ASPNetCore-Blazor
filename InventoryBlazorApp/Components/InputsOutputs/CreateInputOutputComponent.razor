@@ -1,0 +1,105 @@
+﻿@using Entities
+@using Business;
+
+@inject NavigationManager navManager;
+
+<div class="form-group">
+    <select class="form-control" @onchange="OnWarehouseChanged">
+        <option value=" ">Seleccione una bodega</option>
+        @foreach (var item in bodegas)
+        {
+            <option value="@item.WarehouseId">@item.Name</option>
+        }
+    </select>
+</div>
+<hr />
+<div class="pt-1">
+    <EditForm Model="movimiento">
+        <div class="form-group">
+            <label>Producto:</label>
+            <InputSelect class="form-control" @bind-Value="movimiento.StorageIdString">
+                <option>Seleccione un producto</option>
+                @foreach (var item in almacenes)
+                {
+                    <option value="@item.StorageId">@($"{item.Product.Name}, Cantidad: {item.PartialQuantity}")</option>
+                }
+            </InputSelect>
+        </div>
+        <div class="form-group">
+            <label>Cantidad:</label>
+            <InputNumber class="form-control" @bind-Value="@movimiento.Quantity"></InputNumber>
+        </div>
+        <div class="form-group text-center">
+            <label>¿Es una entrada?</label>
+            <InputCheckbox class="form-control" @bind-Value="@movimiento.IsInput"></InputCheckbox>
+        </div>
+        <input type="button" class="btn btn-success w-100 px-5" value="@textoBoton" @onclick="SaveInputOutput" />
+    </EditForm>
+</div>
+<div class="text-center h4">
+    @mensage
+</div>
+
+@code {
+    InputOutputEntity movimiento = new InputOutputEntity();
+    List<WarehouseEntity> bodegas = new List<WarehouseEntity>();
+    List<StorageEntity> almacenes = new List<StorageEntity>();
+
+    string textoBoton => movimiento.IsInput ? "Registrar Entrada" : "Registrar Salida";
+
+    string mensage = string.Empty;
+
+    protected override Task OnInitializedAsync()
+    {
+        bodegas = BWarehouse.WarehouseList();
+        return base.OnInitializedAsync();
+    }
+
+    public void SaveInputOutput()
+    {
+        var almacen = almacenes.FirstOrDefault(x => x.StorageId == movimiento.StorageId);
+        var producto = almacen.Product;
+
+        if (movimiento.IsInput)
+        {
+            almacen.PartialQuantity += Math.Abs(movimiento.Quantity);
+            BStorage.UpdateStorage(almacen);
+
+            producto.TotalQuantity += Math.Abs(movimiento.Quantity);
+            BProduct.UpdateProduct(producto);
+
+            BInputOutput.CreateInputOutput(movimiento);
+
+            mensage = $"El producto {producto.Name} se actualizó.";
+        }
+        else
+        {
+            if (Math.Abs(movimiento.Quantity) > almacen.PartialQuantity)
+            {
+                mensage = $"El producto {producto.Name}, no cuenta con el inventario suficiente para realizar esta operación.";
+            }
+            else
+            {
+                almacen.PartialQuantity -= Math.Abs(movimiento.Quantity);
+                BStorage.UpdateStorage(almacen);
+
+                producto.TotalQuantity -= Math.Abs(movimiento.Quantity);
+                BProduct.UpdateProduct(producto);
+
+                BInputOutput.CreateInputOutput(movimiento);
+
+                mensage = $"El producto {producto.Name} se actualizó.";
+            }
+        }
+
+        //BProduct.CreateProduct(producto);
+        //navManager.NavigateTo("Movimientos");
+    }
+
+    private void OnWarehouseChanged(ChangeEventArgs e)
+    {
+        Guid.TryParse(e.Value.ToString(), out Guid warehouseId);
+
+        almacenes = BStorage.StorageListByWarehouse(warehouseId);
+    }
+}

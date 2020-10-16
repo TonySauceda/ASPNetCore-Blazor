@@ -1,5 +1,6 @@
 ﻿using DataAccess;
 using Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace Business
         {
             using (var db = new InventoryContext())
             {
-                return db.Products.ToList();
+                return db.Products.Include(x => x.Category).ToList();
             }
         }
 

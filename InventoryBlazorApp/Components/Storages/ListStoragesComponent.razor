@@ -1,0 +1,89 @@
+﻿@using Entities
+@using Business;
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <select class="form-control" @onchange="WarehouseChange">
+                <option value=" ">Seleccione una bodega</option>
+                @foreach (var item in bodegas)
+                {
+                    <option value="@item.WarehouseId">@item.Name</option>
+                }
+            </select>
+        </div>
+        <div class="col">
+            <select class="form-control" @onchange="ProductChange">
+                <option value=" ">Seleccione un producto</option>
+                @foreach (var item in productos)
+                {
+                    <option value="@item.ProductId">@item.Name</option>
+                }
+            </select>
+        </div>
+    </div>
+
+</div>
+
+<table class="table table-hover table-bordered">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Producto</th>
+            <th>Ultima Actualización</th>
+            <th>Cantidad</th>
+            <th>Bodega</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in almacenesFiltrados)
+        {
+            <tr>
+                <td>@item.WarehouseId</td>
+                <td>@item.Product.Name</td>
+                <td>@item.LastUpdate.ToString("dd/MM/yyyy hh:mm:ss tt")</td>
+                <td>@item.PartialQuantity</td>
+                <td>@item.Warehouse.Name</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code{
+    List<StorageEntity> almacenes;
+    List<StorageEntity> almacenesFiltrados;
+    List<WarehouseEntity> bodegas;
+    List<ProductEntity> productos;
+
+    Guid idBodega = Guid.Empty;
+    Guid idProducto = Guid.Empty;
+
+    protected override Task OnInitializedAsync()
+    {
+        almacenes = almacenesFiltrados = BStorage.StorageList();
+        bodegas = BWarehouse.WarehouseList();
+        productos = BProduct.ProductList().OrderBy(x => x.Name).ToList();
+        return base.OnInitializedAsync();
+    }
+
+    private void WarehouseChange(ChangeEventArgs e)
+    {
+        Guid.TryParse(e.Value.ToString(), out idBodega);
+        FilterStorages();
+    }
+
+    private void ProductChange(ChangeEventArgs e)
+    {
+        Guid.TryParse(e.Value.ToString(), out idProducto);
+        FilterStorages();
+    }
+
+    private void FilterStorages()
+    {
+        almacenesFiltrados = almacenes
+            .Where(x =>
+                (idProducto == Guid.Empty || x.ProductId == idProducto) &&
+                (idBodega == Guid.Empty || x.WarehouseId == idBodega))
+            .ToList();
+    }
+}

@@ -10,7 +10,7 @@ namespace Entities
     public class ProductEntity
     {
         [Key]
-        public Guid ProductId { get; set; } = Guid.NewGuid();
+        public Guid ProductId { get; set; }
         [Required]
         [StringLength(100)]
         public string Name { get; set; }

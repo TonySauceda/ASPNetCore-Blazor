@@ -1,0 +1,63 @@
+﻿@using Entities
+@using Business;
+
+@inject NavigationManager navManager;
+
+<div>
+    <EditForm Model="almacen">
+        <div class="form-group">
+            <label>Producto:</label>
+            <InputSelect class="form-control" @bind-Value="almacen.ProductIdString" @onchange="LimpiarMensaje">
+                @foreach (var item in productos)
+                {
+                    <option value="@item.ProductId">@item.Name</option>
+                }
+            </InputSelect>
+        </div>
+        <div class="form-group">
+            <label>Bodega:</label>
+            <InputSelect class="form-control" @bind-Value="almacen.WarehouseIdString">
+                @foreach (var item in bodegas)
+                {
+                    <option value="@item.WarehouseId">@item.Name</option>
+                }
+            </InputSelect>
+        </div>
+
+        <input type="button" class="btn btn-success" value="Guardar" @onclick="SaveStorage" />
+    </EditForm>
+    <div class="text-center h4 text-danger">
+        @mensaje
+    </div>
+</div>
+
+@code {
+    StorageEntity almacen = new StorageEntity();
+    List<WarehouseEntity> bodegas;
+    List<ProductEntity> productos;
+    string mensaje = string.Empty;
+
+    protected override Task OnInitializedAsync()
+    {
+        bodegas = BWarehouse.WarehouseList();
+        productos = BProduct.ProductList().OrderBy(x => x.Name).ToList();
+        return base.OnInitializedAsync();
+    }
+
+    public void LimpiarMensaje(ChangeEventArgs e)
+    {
+        mensaje = string.Empty;
+    }
+
+    public void SaveStorage()
+    {
+        if(BStorage.IsProductInWarehouse(almacen.ProductId,almacen.WarehouseId))
+            mensaje = "El producto seleccionado ya se encuentra registrado para la bodega seleccionada";
+        else
+        {
+            almacen.LastUpdate = DateTime.Now;
+            BStorage.CreateStorage(almacen);
+            navManager.NavigateTo("Almacenes");
+        }
+    }
+}

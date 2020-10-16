@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace Entities
@@ -24,5 +25,19 @@ namespace Entities
 
         //Relació con movimientos
         public IEnumerable<InputOutputEntity> InputOutputs { get; set; }
+
+        [NotMapped]
+        public string WarehouseIdString
+        {
+            get => WarehouseId.ToString();
+            set => WarehouseId = Guid.TryParse(value, out Guid temp) ? temp : default;
+        }
+        [NotMapped]
+        public string ProductIdString
+        {
+            get => ProductId.ToString();
+            set => ProductId = Guid.TryParse(value, out Guid temp) ? temp : default;
+
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using DataAccess;
 using Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,12 @@ namespace Business
         {
             using (var db = new InventoryContext())
             {
-                return db.InputOutputs.ToList();
+                return db.InputOutputs
+                    .Include(x => x.Storage)
+                    .ThenInclude(x => x.Warehouse)
+                    .Include(x => x.Storage)
+                    .ThenInclude(x => x.Product)
+                    .ToList();
             }
         }
 
@@ -21,6 +27,7 @@ namespace Business
         {
             using (var db = new InventoryContext())
             {
+                inputOutput.Date = DateTime.Now;
                 db.InputOutputs.Add(inputOutput);
 
                 db.SaveChanges();

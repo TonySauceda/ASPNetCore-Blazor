@@ -1,0 +1,40 @@
+﻿@using Entities
+@using Business;
+
+
+<table class="table table-hover table-bordered">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Fecha</th>
+            <th>Bodega</th>
+            <th>Producto</th>
+            <th>Cantidad</th>
+            <th>Tipo</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in movimientosFiltrados)
+        {
+            <tr>
+                <td>@item.InputOutputId</td>
+                <td>@item.Date.ToString("dd/MM/yyyy hh:mm:ss tt")</td>
+                <td>@item.Storage.Warehouse.Name</td>
+                <td>@item.Storage.Product.Name</td>
+                <td>@item.Quantity</td>
+                <td>@(item.IsInput?"Entrada":"Salida")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code{
+    List<InputOutputEntity> movimientos;
+    List<InputOutputEntity> movimientosFiltrados;
+
+    protected override Task OnInitializedAsync()
+    {
+        movimientos = movimientosFiltrados = BInputOutput.InputOutputList();
+        return base.OnInitializedAsync();
+    }
+}

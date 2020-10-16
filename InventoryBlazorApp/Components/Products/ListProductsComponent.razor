@@ -3,7 +3,7 @@
 
 <div class="w-100 py-2">
     <select class="form-control" @onchange="CategoryChange">
-        <option value="">Seleccione una categoría</option>
+        <option value=" ">Seleccione una categoría</option>
         @foreach (var item in categorias)
         {
             <option value="@item.CategoryId">@item.Name</option>
@@ -30,7 +30,7 @@
             <td>@item.ProductId</td>
             <td>@item.Name</td>
             <td>@item.Description</td>
-            <td>@item.CategoryId</td>
+            <td>@item.Category.Name</td>
             <td><a href="Productos/Modificar/@item.ProductId">Modificar</a></td>
         </tr>
         }
