@@ -1,0 +1,61 @@
+﻿@using Entities
+@using Business;
+
+<div class="w-100 py-2">
+    <select class="form-control" @onchange="CategoryChange">
+        <option value="">Seleccione una categoría</option>
+        @foreach (var item in categorias)
+        {
+            <option value="@item.CategoryId">@item.Name</option>
+        }
+    </select>
+</div>
+
+@tempMessage
+
+<table class="table table-hover table-bordered">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Categoría</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in productosFiltrados)
+        {
+        <tr>
+            <td>@item.ProductId</td>
+            <td>@item.Name</td>
+            <td>@item.Description</td>
+            <td>@item.CategoryId</td>
+            <td><a href="Productos/Modificar/@item.ProductId">Modificar</a></td>
+        </tr>
+        }
+    </tbody>
+</table>
+
+@code{
+    List<ProductEntity> productos;
+    List<ProductEntity> productosFiltrados;
+    List<CategoryEntity> categorias;
+    string tempMessage;
+
+    protected override Task OnInitializedAsync()
+    {
+        productosFiltrados = productos = BProduct.ProductList();
+        categorias = BCategory.CategoryList();
+        return base.OnInitializedAsync();
+    }
+
+    private void CategoryChange(ChangeEventArgs e)
+    {
+        string idCategoria = e.Value.ToString();
+        if (string.IsNullOrWhiteSpace(idCategoria))
+            productosFiltrados = productos;
+        else
+            productosFiltrados = productos.Where(x => x.CategoryIdString == idCategoria).ToList();
+    }
+}

@@ -1,0 +1,14 @@
+﻿@page "/Categorias/Modificar/{CategoryId}"
+
+<UpdateCategoryComponent CategoryId="Guid.Parse(CategoryId)"></UpdateCategoryComponent>
+
+@code{
+    [Parameter]
+    public String CategoryId { get; set; }
+
+    protected override Task OnInitializedAsync()
+    {
+        CategoryId = CategoryId;
+        return base.OnInitializedAsync();
+    }
+}

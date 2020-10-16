@@ -1,0 +1,14 @@
+﻿@page "/Productos/Modificar/{ProductId}"
+
+<UpdateProductComponent ProductId="Guid.Parse(ProductId)"></UpdateProductComponent>
+
+@code{
+    [Parameter]
+    public String ProductId { get; set; }
+
+    protected override Task OnInitializedAsync()
+    {
+        ProductId = ProductId;
+        return base.OnInitializedAsync();
+    }
+}

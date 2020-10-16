@@ -1,0 +1,39 @@
+﻿@using Entities
+@using Business;
+
+<div class="w-100 py-2">
+    
+</div>
+
+<table class="table table-hover table-bordered">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nombre</th>
+            <th>Dirección</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in bodegasFiltradas)
+        {
+        <tr>
+            <td>@item.WarehouseId</td>
+            <td>@item.Name</td>
+            <td>@item.Address</td>
+            <td><a href="Bodegas/Modificar/@item.WarehouseId">Modificar</a></td>
+        </tr>
+        }
+    </tbody>
+</table>
+
+@code{
+    List<WarehouseEntity> bodegas;
+    List<WarehouseEntity> bodegasFiltradas;
+
+    protected override Task OnInitializedAsync()
+    {
+        bodegas = bodegasFiltradas = BWarehouse.WarehouseList();
+        return base.OnInitializedAsync();
+    }
+}

@@ -1,0 +1,14 @@
+﻿@page "/Bodegas/Modificar/{WarehouseId}"
+
+<UpdateWarehouseComponent WarehouseId="Guid.Parse(WarehouseId)"></UpdateWarehouseComponent>
+
+@code{
+    [Parameter]
+    public String WarehouseId { get; set; }
+
+    protected override Task OnInitializedAsync()
+    {
+        WarehouseId = WarehouseId;
+        return base.OnInitializedAsync();
+    }
+}

@@ -1,0 +1,38 @@
+﻿@using Entities
+@using Business;
+
+@inject NavigationManager navManager;
+
+<div>
+    <EditForm Model="categoria">
+        <div class="form-group">
+            <label>Nombre:</label>
+            <InputText class="form-control" @bind-Value="categoria.Name"></InputText>
+        </div>
+        <div class="form-group">
+            <label>Nombre Corto:</label>
+            <InputText class="form-control" @bind-Value="categoria.ShortName"></InputText>
+        </div>
+
+        <input type="button" class="btn btn-success" value="Guardar" @onclick="SaveCategory" />
+    </EditForm>
+</div>
+
+@code {
+    [Parameter]
+    public Guid CategoryId { get; set; }
+
+    CategoryEntity categoria;
+
+    protected override Task OnInitializedAsync()
+    {
+        categoria = BCategory.CategoryById(CategoryId);
+        return base.OnInitializedAsync();
+    }
+
+    public void SaveCategory()
+    {
+        BCategory.UpdateCategory(categoria);
+        navManager.NavigateTo("Categorias");
+    }
+}

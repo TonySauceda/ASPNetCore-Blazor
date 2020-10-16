@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace Entities
 {
     public class ProductEntity
     {
         [Key]
-        public Guid ProductId { get; set; }
+        public Guid ProductId { get; set; } = Guid.NewGuid();
         [Required]
         [StringLength(100)]
         public string Name { get; set; }
@@ -22,5 +24,20 @@ namespace Entities
 
         //Relación con almacenes
         public IEnumerable<StorageEntity> Storages { get; set; }
+
+        [NotMapped]
+        public string ProductIdString
+        {
+            get => ProductId.ToString();
+            set => ProductId = Guid.TryParse(value, out Guid temp) ? temp : default;
+        }
+        [NotMapped]
+        public string CategoryIdString
+        {
+            get => CategoryId.ToString();
+            set => CategoryId = Guid.TryParse(value, out Guid temp) ? temp : default;
+
+        }
+
     }
 }
